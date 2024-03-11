@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,18 +20,23 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     @Transactional
-    public void saveCategory(Category category) {
+    public void saveC(Category category) {
         categoryRepository.save(category);
     }
 
     @Override
     @Transactional
-    public void deleteCategoryById(long id) {
+    public void deleteById(long id) {
         categoryRepository.deleteById(id);
     }
 
     @Override
-    public Optional<Category> findCategoryById(long id) {
+    public Optional<Category> findById(long id) {
        return categoryRepository.findById(id);
+    }
+
+    @Override
+    public List<Category> findAll() {
+        return categoryRepository.findAll();
     }
 }

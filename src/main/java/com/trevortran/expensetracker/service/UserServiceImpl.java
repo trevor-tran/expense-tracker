@@ -21,17 +21,17 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public void saveUser(User user) {
+    public void save(User user) {
         userRepository.save(user);
     }
 
     @Override
-    public Optional<User> findUserByEmail(String email) {
+    public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
     @Override
-    public Optional<User> findUserById(UUID id) {
+    public Optional<User> findById(UUID id) {
         return userRepository.findById(id);
     }
 }

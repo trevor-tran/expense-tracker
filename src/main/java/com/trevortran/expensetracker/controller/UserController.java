@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @Slf4j
-@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
@@ -20,8 +20,13 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping(value = "/")
+    public String homePage() {
+        return "layout";
+    }
     @GetMapping("/signup")
     public String signUp(ModelAndView modelAndView) {
         return "singup";
     }
+
 }

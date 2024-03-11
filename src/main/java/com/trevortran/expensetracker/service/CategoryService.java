@@ -2,11 +2,12 @@ package com.trevortran.expensetracker.service;
 
 import com.trevortran.expensetracker.model.Category;
 
-import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
 
 public interface CategoryService {
-    void saveCategory(Category category);
-    void deleteCategoryById(long id);
-    Optional<Category> findCategoryById(long id);
+    void saveC(Category category);
+    void deleteById(long id);
+    Optional<Category> findById(long id);
+    List<Category> findAll();
 }

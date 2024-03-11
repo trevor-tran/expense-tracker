@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -18,13 +20,29 @@ public class TransactionServiceImpl implements TransactionService{
     }
     @Override
     @Transactional
-    public void saveTransaction(Transaction transaction) {
+    public void save(Transaction transaction) {
         transactionRepository.save(transaction);
     }
 
     @Override
     @Transactional
-    public void deleteTransaction(UUID id) {
+    public void delete(UUID id) {
         transactionRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void update(Transaction transaction) {
+        boolean found = existsById(transaction.getId());
+        if (found) {
+            save(transaction);
+        } else {
+            throw new NoSuchElementException();
+        }
+    }
+
+    @Override
+    public boolean existsById(UUID id) {
+        return transactionRepository.existsById(id);
     }
 }

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <th:block th:insert="~{layout :: head}"/>
+</head>
+<body>
+<div th:insert="~{layout :: container(~{ :: content})}">
+    <div th:fragment="content">
+        analytics
+    </div>
+</div>
+</body>
+</html>
