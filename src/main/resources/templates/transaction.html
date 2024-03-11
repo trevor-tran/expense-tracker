@@ -7,7 +7,8 @@
 <div th:insert="~{layout :: container(~{ :: content})}">
     <div th:fragment="content">
         <div class="row">
-            <div class="col d-flex">
+            <div class="col">
+                <form class="d-flex" action="" method="post">
                 <div>
                     <label for="date">Date</label>
                     <input type="date" id="date" name="date">
@@ -17,9 +18,9 @@
                     <input type="text" id="description" name="description">
                 </div>
 
-                <div class="input-group">
+                <div>
                     <label for="category">Category:</label>
-                    <select name="category" id="category">
+                    <select name="category" id="category" style="width: 200px">
                         <option th:each="category : ${categories}" th:value="${category.getId()}"
                                 th:text="${category.getName()}"></option>
                     </select>
@@ -29,6 +30,8 @@
                     <label for="amount">Amount</label>
                     <input type="number" step="0.01" id="amount" name="amount">
                 </div>
+                    <input type="submit" class="btn btn-primary" value="Add">
+                </form>
             </div>
         </div>
 
@@ -41,11 +44,17 @@
                         <th>Description</th>
                         <th>Category</th>
                         <th>Amount</th>
-                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
-
+                    <th:block th:each="transaction : ${transactions}">
+                    <tr>
+                        <td th:value="${transaction.getDate()}" th:text="${transaction.getDate()}"></td>
+                        <td th:value="${transaction.getDescription()}" th:text="${transaction.getDescription()}"></td>
+                        <td th:value="${transaction.getCategory().getName()}" th:text="${transaction.getCategory().getName()}"></td>
+                        <td th:value="${transaction.getAmount()}" th:text="${transaction.getAmount()}"></td>
+                    </tr>
+                    </th:block>
                     </tbody>
                 </table>
             </div>

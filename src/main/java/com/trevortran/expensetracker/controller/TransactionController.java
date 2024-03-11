@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -34,16 +35,20 @@ public class TransactionController {
         return modelAndView;
     }
 
+    @PostMapping("")
+    public ModelAndView saveTransaction(@ModelAttribute Transaction transaction) {
+        Transaction persistedTransaction = transactionService.save(transaction);
+        ModelAndView modelAndView = new ModelAndView("transaction");
+        modelAndView.addObject("categories", categoryService.findAll());
+        modelAndView.addObject("transactions", transactionService.findAll());
+        System.out.println(persistedTransaction);
+        return modelAndView;
+    }
+
     @GetMapping("/analytic")
     public ModelAndView renderAnalytic() {
         ModelAndView modelAndView = new ModelAndView("analytic");
         return modelAndView;
-    }
-
-    @PostMapping("/{userId}/transaction")
-    public String saveTransaction(@RequestBody Transaction transaction) {
-        transactionService.save(transaction);
-        return transaction.toString();
     }
 
     @PutMapping("/{userId}/transaction/{transactionId}")

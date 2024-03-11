@@ -29,33 +29,36 @@
 <body>
 <main th:fragment="container(content)" class="container-fluid d-flex justify-content-between"
       style="width: 100vw; height: 100vh; padding: 0 10%">
-    <div class="container" th:fragment="sidebar">
-        <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px; height: 100vh">
-            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-                <svg class="bi me-2" width="40" height="32">
-                    <use xlink:href="#bootstrap"></use>
-                </svg>
-                <span class="fs-4">Sidebar</span>
-            </a>
-            <hr>
-            <ul id="navbar" class="nav nav-pills flex-column mb-auto">
-                <li onclick="setActiveLink()">
-                    <a href="/transaction" class="nav-link link-dark">
-                        Expenses
-                    </a>
-                </li>
-                <li onclick="setActiveLink()">
-                    <a href="/transaction/analytic" class="nav-link link-dark">
-                        Analytics
-                    </a>
-                </li>
-            </ul>
+    <div class="row">
+
+        <div class="col-3" th:fragment="sidebar">
+            <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="height: 100vh">
+                <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32">
+                        <use xlink:href="#bootstrap"></use>
+                    </svg>
+                    <span class="fs-4">Sidebar</span>
+                </a>
+                <hr>
+                <ul id="navbar" class="nav nav-pills flex-column mb-auto">
+                    <li onclick="setActiveLink()">
+                        <a href="/transaction" class="nav-link link-dark">
+                            Expenses
+                        </a>
+                    </li>
+                    <li onclick="setActiveLink()">
+                        <a href="/transaction/analytic" class="nav-link link-dark">
+                            Analytics
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-    <!-- reference: https://github.com/thymeleaf/thymeleafexamples-layouts/blob/master/src/main/webapp/WEB-INF/views/task/layout.html-->
-    <!-- The value passed from calling template will be inserted in this element-->
-    <div class="container" th:insert="${content}">
-        <!-- this content will be replaced by calling template-->
+        <!-- reference: https://github.com/thymeleaf/thymeleafexamples-layouts/blob/master/src/main/webapp/WEB-INF/views/task/layout.html-->
+        <!-- The value passed from calling template will be inserted in this element-->
+        <div class="col" th:insert="${content}">
+            <!-- this content will be replaced by calling template-->
+        </div>
     </div>
 </main>
 </body>
