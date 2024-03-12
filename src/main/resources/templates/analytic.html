@@ -1,12 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:insert="~{layout :: head}"/>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="/js/analytic.js"></script>
+
+    <script th:inline="javascript">
+        $(window).on("load", function () {
+            const transactions = [[${transactions}]];
+            loadChart(transactions);
+        });
+    </script>
 </head>
 <body>
 <div th:insert="~{layout :: container(~{ :: content})}">
     <div th:fragment="content">
-        analytics
+        <div class="row">
+            <div class="col">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                data
+            </div>
+        </div>
     </div>
 </div>
 </body>

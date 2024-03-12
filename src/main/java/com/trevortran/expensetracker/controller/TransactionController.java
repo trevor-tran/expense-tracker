@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -30,7 +29,8 @@ public class TransactionController {
 
     @GetMapping("")
     public ModelAndView getAllTransactions() {
-        ModelAndView modelAndView = new ModelAndView("transaction");
+        ModelAndView modelAndView = new ModelAndView("expense");
+        modelAndView.addObject("transactions", transactionService.findAll());
         modelAndView.addObject("categories", categoryService.findAll());
         return modelAndView;
     }
@@ -38,7 +38,7 @@ public class TransactionController {
     @PostMapping("")
     public ModelAndView saveTransaction(@ModelAttribute Transaction transaction) {
         Transaction persistedTransaction = transactionService.save(transaction);
-        ModelAndView modelAndView = new ModelAndView("transaction");
+        ModelAndView modelAndView = new ModelAndView("expense");
         modelAndView.addObject("categories", categoryService.findAll());
         modelAndView.addObject("transactions", transactionService.findAll());
         System.out.println(persistedTransaction);
@@ -48,6 +48,7 @@ public class TransactionController {
     @GetMapping("/analytic")
     public ModelAndView renderAnalytic() {
         ModelAndView modelAndView = new ModelAndView("analytic");
+        modelAndView.addObject("transactions", transactionService.findAll());
         return modelAndView;
     }
 

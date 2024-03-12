@@ -12,7 +12,6 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Transaction {
     @Id
@@ -26,9 +25,10 @@ public class Transaction {
     @JoinColumn(name = "category_id")
     Category category;
 
-    public Transaction(UUID userId, LocalDate date, double amount, Category category) {
-        this.userId = userId;
+    public Transaction(UUID userId, LocalDate date, String description, double amount, Category category) {
+        this.userId = UUID.randomUUID();
         this.date = date;
+        this.description = description;
         this.amount = amount;
         this.category = category;
     }

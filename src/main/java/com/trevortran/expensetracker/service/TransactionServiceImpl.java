@@ -3,6 +3,7 @@ package com.trevortran.expensetracker.service;
 import com.trevortran.expensetracker.model.Transaction;
 import com.trevortran.expensetracker.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +50,6 @@ public class TransactionServiceImpl implements TransactionService{
 
     @Override
     public List<Transaction> findAll() {
-        return transactionRepository.findAll();
+        return transactionRepository.findAll(Sort.by(Sort.Direction.ASC, "date"));
     }
 }
