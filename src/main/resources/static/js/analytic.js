@@ -92,6 +92,12 @@ function loadChart(transactions) {
         data: chartData,
         options: {
             responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Current Month Expenses'
+                }
+            },
             scales: {
                 x: {
                     stacked: true,

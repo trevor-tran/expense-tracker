@@ -6,9 +6,11 @@ import com.trevortran.expensetracker.service.TransactionService;
 import com.trevortran.expensetracker.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.UUID;
 
@@ -16,9 +18,9 @@ import java.util.UUID;
 @Slf4j
 @RequestMapping("/transaction")
 public class TransactionController {
-    private TransactionService transactionService;
-    private CategoryService categoryService;
-    private UserService userService;
+    private final TransactionService transactionService;
+    private final CategoryService categoryService;
+    private final UserService userService;
 
     @Autowired
     public TransactionController(TransactionService transactionService, UserService userService, CategoryService categoryService) {
@@ -35,14 +37,11 @@ public class TransactionController {
         return modelAndView;
     }
 
-    @PostMapping("")
-    public ModelAndView saveTransaction(@ModelAttribute Transaction transaction) {
-        Transaction persistedTransaction = transactionService.save(transaction);
-        ModelAndView modelAndView = new ModelAndView("expense");
-        modelAndView.addObject("categories", categoryService.findAll());
-        modelAndView.addObject("transactions", transactionService.findAll());
-        System.out.println(persistedTransaction);
-        return modelAndView;
+    @PostMapping("/new")
+    public RedirectView saveTransaction(@ModelAttribute Transaction transaction) {
+        transactionService.save(transaction);
+
+        return new RedirectView("/transaction");
     }
 
     @GetMapping("/analytic")
@@ -52,7 +51,7 @@ public class TransactionController {
         return modelAndView;
     }
 
-    @PutMapping("/{userId}/transaction/{transactionId}")
+    @PutMapping("/{transactionId}")
     public String editTransaction(@PathVariable("transactionId") UUID transactionId,  @RequestBody Transaction transaction) {
         if (!transaction.getId().equals(transactionId)) {
             return "bad request";
@@ -66,14 +65,15 @@ public class TransactionController {
         return "good";
     }
 
-    @DeleteMapping("/{userId}/transaction/{transactionId}")
-    public String deleteTransaction(@PathVariable("transactionId") UUID transactionId) {
+    @DeleteMapping("/{transactionId}")
+    public ResponseEntity<?> deleteTransaction(@PathVariable("transactionId") UUID transactionId) {
         boolean exist = transactionService.existsById(transactionId);
         if (!exist) {
-            return "bad request";
+            return ResponseEntity.badRequest().build();
         }
 
         transactionService.delete(transactionId);
-        return "success";
+
+        return ResponseEntity.ok().build();
     }
 }
