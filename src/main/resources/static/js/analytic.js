@@ -77,7 +77,7 @@ function transformToBarChartData(transactions) {
 
     let colorIndex = 0;
     categoryToTrans.forEach((transArr, categoryName) => {
-        const dataPoint = {label: categoryName, data: []};
+        const dataPoint = {label: v.titleCase(categoryName), data: []};
 
         for (const d of chartData.labels) {
             let amountPerDate = 0;
@@ -114,8 +114,6 @@ function loadChart(transactions) {
         doughnutChartData.datasets[0].data.push(sumPerCategory);
     })
 
-    console.log(doughnutChartData)
-
     const barChartCtx = $("#barChart");
     const doughnutChartCtx = $("#doughnutChart");
 
@@ -133,14 +131,21 @@ function loadChart(transactions) {
                     position: 'top',
                     labels: {
                         font: {
-                            family: "sans-serif"
-                        }
+                            family: "sans-serif",
+                            size: 14,
+                            weight: "bolder",
+                        },
                     }
                 }
             },
             scales: {
                 x: {
                     stacked: true,
+                    ticks: {
+                        callback: function (value, index, ticks) {
+                            return dayjs(this.getLabelForValue(value)).format('MMM. DD YYYY')
+                        }
+                    }
                 },
                 y: {
                     stacked: true,
@@ -165,7 +170,9 @@ function loadChart(transactions) {
                     labels: {
                         // This more specific font property overrides the global property
                         font: {
-                            family: "sans-serif"
+                            family: "sans-serif",
+                            size: 14,
+                            weight: "bolder"
                         }
                     }
                 }
@@ -186,13 +193,19 @@ function loadChart(transactions) {
                 ctx.textAlign = "center";
 
                 ctx.textBaseline = "bottom";
-                ctx.font = "1em sans-serif";
+                ctx.font = "0.7em sans-serif";
                 ctx.fillText("Total Expenses", centerX, centerY);
+
+                // Format to USD using the locale, style, and currency.
+                let USDollar = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                });
 
                 const totalSpending = chart.config.data.datasets[0].data.reduce((acc, curr) => acc + curr, 0);
                 ctx.textBaseline = "top";
-                ctx.font = "bolder 2em sans-serif";
-                ctx.fillText(`$${totalSpending}`, centerX, centerY);
+                ctx.font = "bolder 1.3em sans-serif";
+                ctx.fillText(USDollar.format(totalSpending), centerX, centerY);
 
                 ctx.save();
             }

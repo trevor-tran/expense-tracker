@@ -36,7 +36,3 @@ function populateToEditForm(transaction) {
     $("#category-edit").val(category.id)
     $("#amount-edit").val(amount);
 }
-
-function formatDate(date) {
-    return dayjs(date).format('MMM. DD YYYY');
-}
