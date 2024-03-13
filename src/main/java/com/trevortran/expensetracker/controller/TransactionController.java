@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -37,7 +38,9 @@ public class TransactionController {
         return modelAndView;
     }
 
-    @PostMapping("/new")
+
+
+    @PostMapping("/")
     public RedirectView saveTransaction(@ModelAttribute Transaction transaction) {
         transactionService.save(transaction);
 
@@ -51,18 +54,10 @@ public class TransactionController {
         return modelAndView;
     }
 
-    @PutMapping("/{transactionId}")
-    public String editTransaction(@PathVariable("transactionId") UUID transactionId,  @RequestBody Transaction transaction) {
-        if (!transaction.getId().equals(transactionId)) {
-            return "bad request";
-        }
-
-        boolean exist = transactionService.existsById(transaction.getId());
-        if (!exist) {
-            return "bad request";
-        }
-        transactionService.update(transaction);
-        return "good";
+    @GetMapping("/{transactionId}")
+    public ResponseEntity<?> getTransaction(@PathVariable("transactionId") UUID transactionId) {
+        Optional<Transaction> transaction = transactionService.findById(transactionId);
+        return transaction.map(ResponseEntity::ok).orElse(ResponseEntity.badRequest().build());
     }
 
     @DeleteMapping("/{transactionId}")

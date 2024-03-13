@@ -10,13 +10,13 @@
     <div th:fragment="content">
         <div class="row">
             <div class="col">
-                <form class="d-flex" action="/transaction/new" method="post">
+                <form class="d-flex" action="/transaction/" method="post">
                     <div>
                         <label for="date">Date</label>
                         <input type="date" id="date" name="date" required>
                     </div>
                     <div>
-                        <label for="date">Description</label>
+                        <label for="description">Description</label>
                         <input type="text" id="description" name="description" maxlength="100" required>
                     </div>
 
@@ -30,7 +30,7 @@
 
                     <div>
                         <label for="amount">Amount</label>
-                        <input type="number" step="0.01" id="amount" name="amount" required>
+                        <input type="number" step="0.01" id="amount" name="amount" min="0.01" max="1000000" required>
                     </div>
                     <input type="submit" class="btn btn-primary" value="Add">
                 </form>
@@ -38,7 +38,7 @@
         </div>
 
         <div class="row">
-            <div class="col table-responsive">
+            <div class="col table-responsive-xl">
                 <table id="transaction-table" class="table table-bordered table-hover">
                     <thead class="table-primary">
                     <tr>
@@ -67,13 +67,53 @@
                                     </svg>
                                 </button>
 
-                                <button type="button" class="btn" style="padding: 0">
+                                <button type="button" class="btn" style="padding: 0" data-bs-toggle="modal" data-bs-target="#editModal" th:onclick="editTransactionById([[${transaction.getId()}]])">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"></path>
                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"></path>
                                     </svg>
                                 </button>
                             </td>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModal" aria-hidden="true" data-bs-keyboard="false" data-bs-backdrop="static">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Edit Expense</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form class="d-flex" action="/transaction/" method="post">
+                                                <input type="hidden" id="id-edit" name="id" value="">
+                                                <div>
+                                                    <label for="date-edit">Date</label>
+                                                    <input type="date" id="date-edit" name="date" required>
+                                                </div>
+                                                <div>
+                                                    <label for="description-edit">Description</label>
+                                                    <input type="text" id="description-edit" name="description" maxlength="100" required>
+                                                </div>
+
+                                                <div>
+                                                    <label for="category-edit">Category:</label>
+                                                    <select id="category-edit" name="category" style="width: 200px">
+                                                        <option th:each="category : ${categories}" th:value="${category.getId()}"
+                                                                th:text="${category.getName()}"></option>
+                                                    </select>
+                                                </div>
+
+                                                <div>
+                                                    <label for="amount-edit">Amount</label>
+                                                    <input type="number" step="0.01" id="amount-edit" name="amount" min="0.01" max="1000000" required>
+                                                </div>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <input type="submit" class="btn btn-primary" value="Save changes">
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </tr>
                     </th:block>
                     </tbody>

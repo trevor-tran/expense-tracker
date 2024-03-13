@@ -33,19 +33,13 @@ public class TransactionServiceImpl implements TransactionService{
     }
 
     @Override
-    @Transactional
-    public void update(Transaction transaction) {
-        boolean found = existsById(transaction.getId());
-        if (found) {
-            save(transaction);
-        } else {
-            throw new NoSuchElementException();
-        }
+    public boolean existsById(UUID id) {
+        return transactionRepository.existsById(id);
     }
 
     @Override
-    public boolean existsById(UUID id) {
-        return transactionRepository.existsById(id);
+    public Optional<Transaction> findById(UUID id) {
+       return transactionRepository.findById(id);
     }
 
     @Override
