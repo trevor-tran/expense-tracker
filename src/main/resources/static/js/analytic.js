@@ -44,8 +44,21 @@ const sample = [
         }
     }
 ]
+const COLORS = [
+    '#4BC0C0',
+    '#FF6384',
+    '#FF9F40',
+    '#9966FF',
+    '#FFCD56',
+    '#36A2EB',
+    '#C9CBCF',
+    '#FF6384',
+    '#537bc4',
+    '#166a8f',
+    '#58595b',
+];
 
-function convertToChartData(transactions) {
+function transformToBarChartData(transactions) {
     const dateSet = new Set();
     const categoryToTrans = new Map();
 
@@ -58,11 +71,11 @@ function convertToChartData(transactions) {
         }
         categoryToTrans.get(category.name).push({date, amount});
     }
-        console.log(categoryToTrans)
 
     const chartData = {labels: [], datasets: []};
     chartData.labels = Array.from(dateSet).sort();
 
+    let colorIndex = 0;
     categoryToTrans.forEach((transArr, categoryName) => {
         const dataPoint = {label: categoryName, data: []};
 
@@ -76,20 +89,39 @@ function convertToChartData(transactions) {
 
             dataPoint.data.push(amountPerDate);
         }
+        dataPoint.backgroundColor = COLORS[colorIndex++];
 
         chartData.datasets.push(dataPoint);
     });
-    console.log(chartData);
     return chartData;
 }
 
 function loadChart(transactions) {
-    const chartData = convertToChartData(transactions);
-    const ctx = $("#myChart");
+    const barChartData = transformToBarChartData(transactions);
+    const doughnutChartData = {
+        labels: [],
+        datasets: [{
+            label: "",
+            data: [],
+            backgroundColor: COLORS
+        }]
+    };
 
-    new Chart(ctx, {
+    barChartData.datasets.forEach(v => {
+        const {label, data} = v;
+        doughnutChartData.labels.push(label);
+        const sumPerCategory = data.reduce((acc, current) => acc + current, 0);
+        doughnutChartData.datasets[0].data.push(sumPerCategory);
+    })
+
+    console.log(doughnutChartData)
+
+    const barChartCtx = $("#barChart");
+    const doughnutChartCtx = $("#doughnutChart");
+
+    new Chart(barChartCtx, {
         type: 'bar',
-        data: chartData,
+        data: barChartData,
         options: {
             responsive: true,
             plugins: {
@@ -105,6 +137,23 @@ function loadChart(transactions) {
                 y: {
                     stacked: true,
                     beginAtZero: true
+                }
+            }
+        }
+    });
+
+    new Chart(doughnutChartCtx, {
+        type: 'doughnut',
+        data: doughnutChartData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Current Month Expenses'
                 }
             }
         }
