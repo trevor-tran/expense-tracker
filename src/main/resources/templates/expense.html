@@ -24,7 +24,7 @@
                         <label for="category">Category:</label>
                         <select name="category" id="category" style="width: 200px">
                             <option th:each="category : ${categories}" th:value="${category.getId()}"
-                                    th:text="${category.getName()}"></option>
+                                    th:text="${#strings.capitalize(category.getName())}"></option>
                         </select>
                     </div>
 
@@ -52,12 +52,10 @@
                     <tbody>
                     <th:block th:each="transaction : ${transactions}">
                         <tr>
-                            <td th:value="${transaction.getDate()}" th:text="${transaction.getDate()}"></td>
-                            <td th:value="${transaction.getDescription()}"
-                                th:text="${transaction.getDescription()}"></td>
-                            <td th:value="${transaction.getCategory().getName()}"
-                                th:text="${transaction.getCategory().getName()}"></td>
-                            <td th:value="${transaction.getAmount()}" th:text="${transaction.getAmount()}"></td>
+                            <td th:value="${transaction.getDate()}" th:text="${#temporals.format(transaction.getDate(), 'MMM. dd yyyy')}"></td>
+                            <td th:value="${transaction.getDescription()}" th:text="${transaction.getDescription()}"></td>
+                            <td th:value="${transaction.getCategory().getName()}" th:text="${#strings.capitalize(transaction.getCategory().getName())}"></td>
+                            <td th:value="${transaction.getAmount()}" th:text="${#numbers.formatCurrency(transaction.getAmount())}"></td>
                             <td>
                                 <button type="button" class="btn" style="margin-right: 10px; padding: 0" th:onclick="deleteTransactionById([[${transaction.getId()}]])">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red"
@@ -99,7 +97,7 @@
                                                     <label for="category-edit">Category:</label>
                                                     <select id="category-edit" name="category" style="width: 200px">
                                                         <option th:each="category : ${categories}" th:value="${category.getId()}"
-                                                                th:text="${category.getName()}"></option>
+                                                                th:text="${#strings.capitalize(category.getName())}"></option>
                                                     </select>
                                                 </div>
 

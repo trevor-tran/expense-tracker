@@ -150,7 +150,7 @@ function loadChart(transactions) {
         }
     });
 
-    const doughutChart = new Chart(doughnutChartCtx, {
+    new Chart(doughnutChartCtx, {
         type: 'doughnut',
         data: doughnutChartData,
         options: {
@@ -198,6 +198,4 @@ function loadChart(transactions) {
             }
         }]
     });
-
-
 }
