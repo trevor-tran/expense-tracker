@@ -142,7 +142,7 @@ function loadChart(transactions) {
         }
     });
 
-    new Chart(doughnutChartCtx, {
+    const doughutChart = new Chart(doughnutChartCtx, {
         type: 'doughnut',
         data: doughnutChartData,
         options: {
@@ -156,6 +156,34 @@ function loadChart(transactions) {
                     text: 'Current Month Expenses'
                 }
             }
-        }
+        },
+        plugins: [{
+            beforeDraw: function(chart) {
+                // resource: https://github.com/chartjs/Chart.js/discussions/10077
+                const ctx = chart.ctx;
+                const {width, height, top} = chart.chartArea;
+                const centerX = width / 2;
+                const centerY = height / 2 + top;
+
+                ctx.restore();
+
+                const metrics = ctx.measureText('100.0%');
+                ctx.clearRect(centerX - metrics.width / 2, centerY - 30, metrics.width, 60);
+                ctx.textAlign = "center";
+
+                ctx.textBaseline = "bottom";
+                ctx.font = "1em sans-serif";
+                ctx.fillText("Total Expenses", centerX, centerY);
+
+                const totalSpending = chart.config.data.datasets[0].data.reduce((acc, curr) => acc + curr, 0);
+                ctx.textBaseline = "top";
+                ctx.font = "bolder 2em sans-serif";
+                ctx.fillText(`$${totalSpending}`, centerX, centerY);
+
+                ctx.save();
+            }
+        }]
     });
+
+
 }
