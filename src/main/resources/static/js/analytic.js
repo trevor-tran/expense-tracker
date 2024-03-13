@@ -128,6 +128,14 @@ function loadChart(transactions) {
                 title: {
                     display: true,
                     text: 'Current Month Expenses'
+                },
+                legend: {
+                    position: 'top',
+                    labels: {
+                        font: {
+                            family: "sans-serif"
+                        }
+                    }
                 }
             },
             scales: {
@@ -148,17 +156,23 @@ function loadChart(transactions) {
         options: {
             responsive: true,
             plugins: {
-                legend: {
-                    position: 'top',
-                },
                 title: {
                     display: true,
                     text: 'Current Month Expenses'
+                },
+                legend: {
+                    position: 'top',
+                    labels: {
+                        // This more specific font property overrides the global property
+                        font: {
+                            family: "sans-serif"
+                        }
+                    }
                 }
             }
         },
         plugins: [{
-            beforeDraw: function(chart) {
+            beforeDraw: function (chart) {
                 // resource: https://github.com/chartjs/Chart.js/discussions/10077
                 const ctx = chart.ctx;
                 const {width, height, top} = chart.chartArea;
