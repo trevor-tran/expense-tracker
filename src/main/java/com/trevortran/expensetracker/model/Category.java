@@ -12,7 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Category {
+public class Category implements Comparable<Category>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
@@ -20,5 +20,10 @@ public class Category {
 
     public Category(String name) {
         this.name = name;
+    }
+
+    @Override
+    public int compareTo(Category o) {
+        return name.compareTo(o.name);
     }
 }

@@ -44,6 +44,6 @@ public class TransactionServiceImpl implements TransactionService{
 
     @Override
     public List<Transaction> findAll() {
-        return transactionRepository.findAll(Sort.by(Sort.Direction.ASC, "date"));
+        return transactionRepository.findAll();
     }
 }
