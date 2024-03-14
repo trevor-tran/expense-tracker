@@ -37,7 +37,7 @@ public class TransactionController {
 
     @GetMapping("")
     public ModelAndView getAllTransactions(@RequestParam(value = "sort", defaultValue = "date", required = false) String sortBy,
-                                           @RequestParam(value = "order", defaultValue = "asc", required = false) String orderBy) {
+                                           @RequestParam(value = "order", defaultValue = "desc", required = false) String orderBy) {
         List<Transaction> transactions = transactionService.findAll();
 
         // convert string type to its corresponding enum
