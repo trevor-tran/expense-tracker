@@ -1,34 +1,40 @@
 package com.trevortran.expensetracker.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     UUID id;
-    String email;
-    @OneToMany
-    @JoinColumn(name = "transaction_id")
-    Set<Transaction> transactions;
 
-    public User(String email, Set<Transaction> transactions) {
+    String email;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "transaction_id")
+    List<Transaction> transactions;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    Collection <Role> roles;
+
+    public User(String email, List<Transaction> transactions) {
         this.email = email;
         this.transactions = transactions;
     }
 
     public User(String email) {
-        this(email, new HashSet<>());
+        this(email, new ArrayList<>());
     }
 }
