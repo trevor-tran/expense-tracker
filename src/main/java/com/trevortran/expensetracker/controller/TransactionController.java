@@ -59,7 +59,7 @@ public class TransactionController {
         return modelAndView;
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public RedirectView saveTransaction(@ModelAttribute Transaction transaction) {
         transactionService.save(transaction);
 
