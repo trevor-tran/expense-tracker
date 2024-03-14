@@ -1,7 +1,32 @@
-.headerSortUp {
-    background: url("data:image/gif;base64, R0lGODlhFQAJAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw==") no-repeat 99%;
-}
-.headerSortDown {
-    background: url(data:image/gif; base64, R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjI8Bya2wnINUMopZAQA7) no-repeat 99%;
+#expense-form .form-group {
+    margin-right: 2%;
 }
 
+#expense-edit-form div label {
+    margin-right: 20px;
+}
+
+#expense-edit-form {
+    padding: 10px 20px;
+}
+
+#expense-edit-form .form-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#expense-edit-form .form-row label {
+    margin-right: auto;
+}
+
+#expense-edit-form .form-row input {
+    width: 75%;
+}
+
+#expense-edit-form .form-row select {
+    width: 75%;
+}
