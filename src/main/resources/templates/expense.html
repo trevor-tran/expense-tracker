@@ -18,7 +18,7 @@
         <!-- user inputs -->
         <div class="row">
             <div class="col">
-                <form id="expense-form" class="form-inline d-flex align-items-end" action="/transaction" method="post">
+                <form id="expense-form" class="form-inline d-flex align-items-end" th:action="@{/transaction}" method="post">
                     <div class="form-group col-2">
                         <label for="date">Date</label>
                         <input class="form-control" type="date" id="date" name="date"
@@ -131,7 +131,7 @@
                                                     aria-label="Close"></button>
                                         </div>
                                         <div id="expense-edit-form" class="modal-body">
-                                            <form action="/transaction" method="post">
+                                            <form th:action="@{/transaction}" method="post">
                                                 <input type="hidden" id="id-edit" name="id" value="">
                                                 <div class="form-row">
                                                     <label for="date-edit">Date</label>

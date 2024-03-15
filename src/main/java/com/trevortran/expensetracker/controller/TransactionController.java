@@ -1,24 +1,23 @@
 package com.trevortran.expensetracker.controller;
 
 import com.trevortran.expensetracker.model.Transaction;
+import com.trevortran.expensetracker.security.UserPrincipal;
 import com.trevortran.expensetracker.service.CategoryService;
 import com.trevortran.expensetracker.service.TransactionService;
 import com.trevortran.expensetracker.service.UserService;
 import com.trevortran.expensetracker.util.OrderBy;
 import com.trevortran.expensetracker.util.SortBy;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @Slf4j
@@ -26,21 +25,23 @@ import java.util.UUID;
 public class TransactionController {
     private final TransactionService transactionService;
     private final CategoryService categoryService;
-    private final UserService userService;
+
 
     @Autowired
-    public TransactionController(TransactionService transactionService, UserService userService, CategoryService categoryService) {
+    public TransactionController(TransactionService transactionService, CategoryService categoryService) {
         this.transactionService = transactionService;
-        this.userService = userService;
         this.categoryService = categoryService;
     }
 
     @GetMapping("")
-    public ModelAndView getAllTransactions(@RequestParam(value = "sort", defaultValue = "date", required = false) String sortBy,
+    public ModelAndView getAllTransactions(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                            @RequestParam(value = "sort", defaultValue = "date", required = false) String sortBy,
                                            @RequestParam(value = "order", defaultValue = "desc", required = false) String orderBy) {
-        List<Transaction> transactions = transactionService.findAll();
 
-        // convert string type to its corresponding enum
+        UUID userId = userPrincipal.getId();
+        // todo: ideally should call getTransactions() but currently it throws lazy loading error
+        List<Transaction> transactions = transactionService.findAllByUserId(userId);
+        transactions = transactions != null ? transactions : new ArrayList<>();
         OrderBy orderByEnum = OrderBy.stringToEnum(orderBy);
         SortBy sortByEnum = SortBy.stringToEnum(sortBy);
 
@@ -60,16 +61,22 @@ public class TransactionController {
     }
 
     @PostMapping("")
-    public RedirectView saveTransaction(@ModelAttribute Transaction transaction) {
+    public RedirectView saveTransaction(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                        @ModelAttribute Transaction transaction) {
+
+        transaction.setUserId(userPrincipal.getId());
         transactionService.save(transaction);
 
         return new RedirectView("/transaction");
     }
 
     @GetMapping("/analytic")
-    public ModelAndView renderAnalytic() {
+    public ModelAndView renderAnalytic(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        UUID userId = userPrincipal.getId();
+        List<Transaction> transactions = transactionService.findAllByUserId(userId);
+
         ModelAndView modelAndView = new ModelAndView("analytic");
-        modelAndView.addObject("transactions", transactionService.findAll());
+        modelAndView.addObject("transactions", transactions);
         return modelAndView;
     }
 
@@ -92,6 +99,10 @@ public class TransactionController {
     }
 
     private void sortInPlace(List<Transaction> transactions, SortBy sortBy, OrderBy orderBy) {
+        if (transactions == null || transactions.isEmpty()) {
+            return;
+        }
+
         if (sortBy == SortBy.DESCRIPTION) {
             if (orderBy == OrderBy.ASC) {
                 transactions.sort(Comparator.comparing(Transaction::getDescription));
