@@ -9,30 +9,45 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-5">
-                <form action="#" th:action="@{/user/signup}" method="post" th:object="${userSignUpDTO}">
+                <form action="#" th:action="@{/signup}" method="post" th:object="${userCreationDTO}">
                     <div class="form-group">
                         <label for="first_name">First name</label>
-                        <input type="text"  th:field="*{firstName}" class="form-control" id="first_name" name="firstName" required autofocus placeholder="Enter first name">
+                        <input type="text" th:field="*{firstName}" class="form-control" id="first_name" name="firstName"
+                               required autofocus placeholder="Enter first name">
+                        <span class="text-danger" th:if="${#fields.hasErrors('firstName')}"
+                              th:errors="*{firstName}"></span><br/>
                     </div>
                     <div class="form-group">
                         <label for="last_name">Last name</label>
-                        <input type="text" th:field="*{lastName}" class="form-control" id="last_name" name="lastName" required placeholder="Enter last name">
+                        <input type="text" th:field="*{lastName}" class="form-control" id="last_name" name="lastName"
+                               required placeholder="Enter last name">
+                        <span class="text-danger" th:if="${#fields.hasErrors('lastName')}"
+                              th:errors="*{lastName}"></span><br/>
                     </div>
                     <div class="form-group">
                         <label for="email">Email address</label>
-                        <input type="email" th:field="*{email}" class="form-control" id="email" name="email" required placeholder="Enter email address">
+                        <input type="email" th:field="*{email}" class="form-control" id="email" name="email" required
+                               placeholder="Enter email address">
+                        <span class="text-danger" th:if="${#fields.hasErrors('email')}"
+                              th:errors="*{email}"></span><br/>
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" th:field="*{password}" class="form-control" id="password" name="password" required placeholder="Enter password">
+                        <input type="password" th:field="*{password}" class="form-control" id="password" name="password"
+                               required placeholder="Enter password">
+                        <span class="text-danger" th:if="${#fields.hasErrors('password')}"
+                              th:errors="*{password}"></span><br/>
                     </div>
                     <div class="form-group mb-1">
                         <label for="password_confirmation">Confirm password</label>
-                        <input type="password" th:field="*{matchingPassword}" class="form-control" id="password_confirmation" name="matchingPassword" required placeholder="Confirm password">
+                        <input type="password" th:field="*{matchingPassword}" class="form-control"
+                               id="password_confirmation" name="matchingPassword" required
+                               placeholder="Confirm password">
+                        <span class="text-danger" th:if="${#fields.hasErrors('matchingPassword')}"
+                              th:errors="*{matchingPassword}"></span><br/>
                     </div>
-                    Already have an account? Sign in <a href="/user/signin">here</a><br />
-<!--                    <button type="submit" class="btn btn-primary">Sign up</button>-->
-                    <button type="submit" class="btn btn-primary">Sign up </button>
+                    Already have an account? Sign in <a href="/signin">here</a><br/>
+                    <button type="submit" class="btn btn-primary">Sign up</button>
                 </form>
             </div>
         </div>

@@ -1,5 +1,6 @@
 package com.trevortran.expensetracker.model;
 
+import com.trevortran.expensetracker.util.FieldMatch;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -9,17 +10,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-// todo: password matching and complexity
-//public record UserCreationDTO(@NotBlank @Email String email,
-//                              @NotBlank @Pattern(regexp = "[A-Za-z]+$", message = "Only alphabetic allowed") String firstName,
-//                              @NotBlank @Pattern(regexp = "[A-Za-z]+$", message = "Only alphabetic allowed") String lastName,
-//                              @NotBlank String password,
-//                              @NotBlank String matchingPassword) {
-//}
-
 @Getter
 @Setter
 @NoArgsConstructor
+@FieldMatch.List({@FieldMatch(first = "password", second = "matchingPassword",
+        message = "The password fields must match")})
 public class UserCreationDTO {
     @Pattern(regexp = "[A-Za-z]+$", message = "Only alphabetic allowed")
     private String firstName;
@@ -28,9 +23,9 @@ public class UserCreationDTO {
     @Column(unique = true)
     @Email
     private String email;
-    @NotEmpty(message = "Required")
+    @NotBlank(message = "Required")
     private String password;
-    @NotEmpty(message = "Required")
+    @NotBlank(message = "Required")
     private String matchingPassword;
 
     public UserCreationDTO(@Pattern(regexp = "[A-Za-z]+$",

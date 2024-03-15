@@ -9,7 +9,8 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-5">
-            <form th:action="@{/user/signin}" method="post">
+            <p th:if="${signInError}" class="text-danger">Wrong Email or Password</p>
+            <form th:action="@{/signin}" method="post">
                 <div class="form-group">
                     <label for="email">Email address</label>
                     <input type="email" class="form-control" id="email" name="email" required autofocus placeholder="Enter email address">
@@ -18,7 +19,7 @@
                     <label for="password">Password</label>
                     <input type="password" class="form-control" id="password" name="password" required placeholder="Enter password">
                 </div>
-                Don't have an account? Sign up <a href="/user/signup">here</a><br />
+                Don't have an account? Sign up <a href="/signup">here</a><br />
                 <button type="submit" class="btn btn-primary">Sign in</button>
             </form>
         </div>

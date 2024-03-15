@@ -108,14 +108,14 @@
                             <td th:value="${transaction.getAmount()}"
                                 th:text="${#numbers.formatCurrency(transaction.getAmount())}"></td>
                             <td>
-                                <button type="button" class="btn" style="margin-right: 10px; padding: 0"
-                                        th:onclick="deleteTransactionById([[${transaction.getId()}]])">
+                                <a href="" type="button" class="btn" style="margin-right: 10px; padding: 0"
+                                        th:onclick="deleteTransactionById([[${transaction.getId()}]], [[${_csrf}]])">
                                     <i class="bi bi-trash" style="color: red"></i>
-                                </button>
+                                </a>
 
                                 <button type="button" class="btn" style="padding: 0" data-bs-toggle="modal"
                                         data-bs-target="#editModal"
-                                        th:onclick="editTransactionById([[${transaction.getId()}]])">
+                                        th:onclick="editTransactionById([[${transaction.getId()}]], [[${_csrf}]])">
                                     <i class="bi bi-pencil-square"></i>
                                 </button>
                             </td>

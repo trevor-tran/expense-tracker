@@ -26,7 +26,6 @@ public class TransactionController {
     private final TransactionService transactionService;
     private final CategoryService categoryService;
 
-
     @Autowired
     public TransactionController(TransactionService transactionService, CategoryService categoryService) {
         this.transactionService = transactionService;

@@ -1,7 +1,6 @@
 package com.trevortran.expensetracker.controller;
 
 import com.trevortran.expensetracker.model.UserCreationDTO;
-import com.trevortran.expensetracker.model.UserSignInDTO;
 import com.trevortran.expensetracker.service.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -12,11 +11,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @Slf4j
-@RequestMapping("/user")
 public class UserController {
     @InitBinder
     public void initBinder(WebDataBinder dataBinder) {
@@ -24,6 +21,7 @@ public class UserController {
                 StringTrimmerEditor(true);
         dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
     }
+
     private final UserService userService;
 
     @Autowired
@@ -33,23 +31,29 @@ public class UserController {
 
     @GetMapping("/signup")
     public ModelAndView signUp() {
-
-         ModelAndView modelAndView = new ModelAndView("signup");
-         modelAndView.addObject("userSignUpDTO", new UserCreationDTO());
-         return modelAndView;
+        ModelAndView modelAndView = new ModelAndView("signup");
+        modelAndView.addObject("userCreationDTO", new UserCreationDTO());
+        return modelAndView;
     }
+
     @PostMapping("/signup")
-    public RedirectView signUp(@ModelAttribute("userSignUpDTO") @Valid UserCreationDTO userCreationDTO, BindingResult bindingResult) {
+    public ModelAndView signUp(@ModelAttribute("userCreationDTO") @Valid UserCreationDTO userCreationDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getAllErrors());
+            return new ModelAndView("signup");
         }
         userService.create(userCreationDTO);
-//        userService.loadUserByUsername(userCreationDTO.getEmail());
-        return new RedirectView("/transaction");
+        return new ModelAndView("redirect:/signin");
     }
 
     @GetMapping("/signin")
     public ModelAndView signIn() {
-       return new ModelAndView("signin");
+        return new ModelAndView("signin");
+    }
+
+    @GetMapping(value = "/signin", params = {"error"})
+    public ModelAndView signInError() {
+        ModelAndView modelAndView = new ModelAndView("signin");
+        modelAndView.addObject("signInError", true);
+        return modelAndView;
     }
 }
