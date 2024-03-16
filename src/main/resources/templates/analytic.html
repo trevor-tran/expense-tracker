@@ -16,10 +16,10 @@
 <div th:insert="~{layout :: container(~{ :: content})}">
     <div th:fragment="content">
         <div class="row">
-            <div class="col-8">
+            <div class="col shadow p-2 rounded" style="margin-right: 20px">
                 <canvas id="barChart"></canvas>
             </div>
-            <div class="col-4">
+            <div class="col-4 shadow p-2 rounded">
                 <canvas id="doughnutChart"></canvas>
             </div>
         </div>

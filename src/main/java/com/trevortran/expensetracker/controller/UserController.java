@@ -57,7 +57,9 @@ public class UserController {
 
     @GetMapping("/signin")
     public ModelAndView signIn() {
-        return new ModelAndView("signin");
+        ModelAndView modelAndView = new ModelAndView("signin");
+        modelAndView.addObject("signInError", false);
+        return modelAndView;
     }
 
     @GetMapping(value = "/signin", params = {"error"})
