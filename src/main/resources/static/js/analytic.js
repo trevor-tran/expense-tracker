@@ -125,7 +125,7 @@ function loadChart(transactions) {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Current Month Expenses'
+                    text: 'Current Month Expenses By Day'
                 },
                 legend: {
                     position: 'top',

@@ -36,7 +36,7 @@
     <!-- run on load-->
     <script th:inline="javascript">
         $(window).on("load", function () {
-           setActiveLink();
+            setActiveLink();
         });
     </script>
     <!-- style-->
@@ -44,6 +44,7 @@
         body {
             font-family: "Open Sans", serif;
         }
+
         * {
             padding: 0;
             margin: 0;
@@ -55,34 +56,33 @@
 <main th:fragment="container(content)" class="container-fluid d-flex justify-content-between"
       style="width: 100vw; height: 100vh; padding: 0 10%">
     <div class="row p-2" style="width: 100%; height: 100%">
-        <div th:fragment="sidebar" style="width: 300px; margin-right: 30px">
-            <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="height: 100vh">
-                <div class="d-flex flex-column justify-content-center align-items-center">
-                    <img class="rounded-circle" src="/images/user-default.png" alt="user default avatar" width="100" height="100">
-                    <a href="/logout" class="btn btn-secondary">Sign out</a>
-                </div>
-                <hr>
-                <ul id="navbar" class="nav nav-pills flex-column mb-auto">
-                    <li>
-                        <a href="/transaction" class="nav-link link-dark">
-                            <i class="bi bi-table"></i>
-                            <span class="mx-2">Expenses</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/transaction/analytic" class="nav-link link-dark">
-                            <i class="bi bi-bar-chart-line-fill"></i>
-                            <span class="mx-2">Analytics</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/profile" class="nav-link link-dark">
-                            <i class="bi bi-person-circle"></i>
-                            <span class="mx-2">Profile</span>
-                        </a>
-                    </li>
-                </ul>
+        <div class="shadow-sm d-flex flex-column flex-shrink-0 bg-light" style="height: 100vh; width: 300px; margin-right: 30px">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+                <img class="rounded-circle" src="/images/user-default.png" alt="user default avatar" width="100"
+                     height="100">
+                <a href="/logout" class="btn btn-secondary">Sign out</a>
             </div>
+            <hr>
+            <ul id="navbar" class="nav nav-pills flex-column mb-auto">
+                <li>
+                    <a href="/transaction" class="nav-link link-dark">
+                        <i class="bi bi-table"></i>
+                        <span class="mx-2">Expenses</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/transaction/analytic" class="nav-link link-dark">
+                        <i class="bi bi-bar-chart-line-fill"></i>
+                        <span class="mx-2">Analytics</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/profile" class="nav-link link-dark">
+                        <i class="bi bi-person-circle"></i>
+                        <span class="mx-2">Profile</span>
+                    </a>
+                </li>
+            </ul>
         </div>
         <!-- reference: https://github.com/thymeleaf/thymeleafexamples-layouts/blob/master/src/main/webapp/WEB-INF/views/task/layout.html-->
         <!-- The value passed from calling template will be inserted in this element-->
