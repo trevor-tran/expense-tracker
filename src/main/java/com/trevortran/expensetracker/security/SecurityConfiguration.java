@@ -50,7 +50,6 @@ public class SecurityConfiguration {
                         .usernameParameter("email")
                         .passwordParameter("password")
                         .loginProcessingUrl("/signin")
-//                        .failureForwardUrl("/signin?error")
                         .defaultSuccessUrl("/transaction", true)
                         .permitAll()
                 ).logout(

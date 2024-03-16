@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:insert="~{layout :: head}"/>
+</head>
+<body>
+<div th:insert="~{layout :: container(~{ :: content})}">
+    <div th:fragment="content">
+        <form th:action="@{/profile}" method="post" th:object="${userDTO}">
+            <div class="form-row">
+                <label for="firstName">First Name</label>
+                <input class="form-control" th:field="*{firstName}" type="text" id="firstName" name="firstName"
+                       readonly>
+                <span class="text-danger" th:if="${#fields.hasErrors('firstName')}"
+                      th:errors="*{firstName}"></span><br/>
+            </div>
+            <div class="form-row">
+                <label for="lastName">Description</label>
+                <input class="form-control" th:field="*{lastName}" type="text" id="lastName" name="lastName"
+                       readonly>
+                <span class="text-danger" th:if="${#fields.hasErrors('lastName')}"
+                      th:errors="*{lastName}"></span><br/>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

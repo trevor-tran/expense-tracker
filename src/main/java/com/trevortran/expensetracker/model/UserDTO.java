@@ -1,6 +1,26 @@
 package com.trevortran.expensetracker.model;
 
-import java.util.UUID;
+import jakarta.validation.constraints.Pattern;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-public record UserDTO(UUID id, String email, String firstName, String lastName) {
+import java.util.UUID;
+import java.util.logging.Level;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class UserDTO {
+    @Pattern(regexp = "[A-Za-z]+$", message = "Only alphabetic allowed")
+    String firstName;
+    @Pattern(regexp = "[A-Za-z]+$", message = "Only alphabetic allowed")
+    String lastName;
+
+    public UserDTO(@Pattern(regexp = "[A-Za-z]+$",
+            message = "Only alphabetic allowed") String firstName, @Pattern(regexp =
+            "[A-Za-z]+$", message = "Only alphabetic allowed") String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 }
