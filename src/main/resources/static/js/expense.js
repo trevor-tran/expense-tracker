@@ -1,7 +1,8 @@
 // hook up with add new transaction button
-function deleteTransactionById(transactionId) {
+function deleteTransactionById(transactionId, csrf) {
+    const {token, parameterName} = csrf;
     const currentUrl = window.location.href;
-    const url = `${currentUrl}/${transactionId}`;
+    const url = `${currentUrl}/${transactionId}?${parameterName}=${token}`;
     axios.delete(url)
         .then(response => {
             if (response.status === 200) {
@@ -14,10 +15,10 @@ function deleteTransactionById(transactionId) {
 }
 
 // hook up with edit transaction button
-function editTransactionById(transactionId) {
-    console.log(axios);
+function editTransactionById(transactionId, csrf) {
+    const {token, parameterName} = csrf;
     const currentUrl = window.location.href;
-    const url = `${currentUrl}/${transactionId}`;
+    const url = `${currentUrl}/${transactionId}?${parameterName}=${token}`;
     axios.get(url)
         .then(response => {
             // handle success

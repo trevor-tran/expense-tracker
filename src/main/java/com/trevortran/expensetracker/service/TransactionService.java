@@ -11,5 +11,5 @@ public interface TransactionService {
     void delete(UUID id);
     boolean existsById(UUID id);
     Optional<Transaction> findById(UUID id);
-    List<Transaction> findAll();
+    List<Transaction> findAllByUserId(UUID uuid);
 }

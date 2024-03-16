@@ -43,7 +43,7 @@ public class TransactionServiceImpl implements TransactionService{
     }
 
     @Override
-    public List<Transaction> findAll() {
-        return transactionRepository.findAll();
+    public List<Transaction> findAllByUserId(UUID userId) {
+        return transactionRepository.findAllByUserId(userId);
     }
 }
