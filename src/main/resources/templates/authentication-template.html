@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <th:block th:insert="~{layout :: head}"/>
+</head>
+<body>
+<main th:fragment="container(content)" class="d-flex justify-content-between"
+      style="width: 100vw; height: 100vh">
+    <div class="row justify-content-center align-items-center" style="width: 100%; height: 100%">
+        <div class="col-8 border-right h-100 w-70 d-flex align-items-center" style="background-color: cornflowerblue">
+            <img style="max-height: 100%; max-width: 100%; margin: auto" src="/images/landing.png" alt="Landing image">
+        </div>
+        <div class="col" th:insert="${content}">
+            <!-- this content will be replaced by calling template-->
+        </div>
+    </div>
+</main>
+</body>
+</html>

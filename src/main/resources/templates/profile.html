@@ -15,7 +15,7 @@
                       th:errors="*{firstName}"></span><br/>
             </div>
             <div class="form-row">
-                <label for="lastName">Description</label>
+                <label for="lastName">Last Name</label>
                 <input class="form-control" th:field="*{lastName}" type="text" id="lastName" name="lastName"
                        readonly>
                 <span class="text-danger" th:if="${#fields.hasErrors('lastName')}"

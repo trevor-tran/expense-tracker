@@ -1,57 +1,58 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:insert="~{layout :: head}"/>
+    <th:block th:insert="~{authentication-template :: head}"/>
 </head>
+
 <body>
-<main>
-    <!-- sign up form -->
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-5">
-                <form action="#" th:action="@{/signup}" method="post" th:object="${userCreationDTO}">
-                    <div class="form-group">
-                        <label for="first_name">First name</label>
-                        <input type="text" th:field="*{firstName}" class="form-control" id="first_name" name="firstName"
-                               required autofocus placeholder="Enter first name">
-                        <span class="text-danger" th:if="${#fields.hasErrors('firstName')}"
-                              th:errors="*{firstName}"></span><br/>
-                    </div>
-                    <div class="form-group">
-                        <label for="last_name">Last name</label>
-                        <input type="text" th:field="*{lastName}" class="form-control" id="last_name" name="lastName"
-                               required placeholder="Enter last name">
-                        <span class="text-danger" th:if="${#fields.hasErrors('lastName')}"
-                              th:errors="*{lastName}"></span><br/>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email address</label>
-                        <input type="email" th:field="*{email}" class="form-control" id="email" name="email" required
-                               placeholder="Enter email address">
-                        <span class="text-danger" th:if="${#fields.hasErrors('email')}"
-                              th:errors="*{email}"></span><br/>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" th:field="*{password}" class="form-control" id="password" name="password"
-                               required placeholder="Enter password">
-                        <span class="text-danger" th:if="${#fields.hasErrors('password')}"
-                              th:errors="*{password}"></span><br/>
-                    </div>
-                    <div class="form-group mb-1">
-                        <label for="password_confirmation">Confirm password</label>
-                        <input type="password" th:field="*{matchingPassword}" class="form-control"
-                               id="password_confirmation" name="matchingPassword" required
-                               placeholder="Confirm password">
-                        <span class="text-danger" th:if="${#fields.hasErrors('matchingPassword')}"
-                              th:errors="*{matchingPassword}"></span><br/>
-                    </div>
-                    Already have an account? Sign in <a href="/signin">here</a><br/>
-                    <button type="submit" class="btn btn-primary">Sign up</button>
-                </form>
+<div th:insert="~{authentication-template :: container(~{ :: content})}">
+    <div th:fragment="content">
+        <div class="shadow p-3 mb-5 bg-white rounded m-auto" style="width: 80%">
+            <div class="text-center">
+                <p class="h1 m-auto">Sign Up</p>
             </div>
+            <form action="#" th:action="@{/signup}" method="post" th:object="${userCreationDTO}">
+                <div class="form-group">
+                    <label for="first_name">First Name</label>
+                    <input type="text" th:field="*{firstName}" class="form-control" id="first_name" name="firstName"
+                           required autofocus placeholder="Enter first name">
+                    <span class="text-danger" th:if="${#fields.hasErrors('firstName')}"
+                          th:errors="*{firstName}"></span><br/>
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" th:field="*{lastName}" class="form-control" id="last_name" name="lastName"
+                           required placeholder="Enter last name">
+                    <span class="text-danger" th:if="${#fields.hasErrors('lastName')}"
+                          th:errors="*{lastName}"></span><br/>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" th:field="*{email}" class="form-control" id="email" name="email" required
+                           placeholder="Enter email address">
+                    <span class="text-danger" th:if="${#fields.hasErrors('email')}"
+                          th:errors="*{email}"></span><br/>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" th:field="*{password}" class="form-control" id="password" name="password"
+                           required placeholder="Enter password">
+                    <span class="text-danger" th:if="${#fields.hasErrors('password')}"
+                          th:errors="*{password}"></span><br/>
+                </div>
+                <div class="form-group mb-1">
+                    <label for="password_confirmation">Confirm Password</label>
+                    <input type="password" th:field="*{matchingPassword}" class="form-control"
+                           id="password_confirmation" name="matchingPassword" required
+                           placeholder="Confirm password">
+                </div>
+                <p class="mt-2">Already have an account? Sign in <a href="/signin">here</a></p>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary w-50">Sign up</button>
+                </div>
+            </form>
         </div>
     </div>
-</main>
+</div>
 </body>
 </html>
