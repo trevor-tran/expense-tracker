@@ -12,6 +12,9 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Implementing Transaction Service Interface
+ */
 @Service
 public class TransactionServiceImpl implements TransactionService{
     private final TransactionRepository transactionRepository;

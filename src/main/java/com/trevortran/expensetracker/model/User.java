@@ -1,12 +1,17 @@
 package com.trevortran.expensetracker.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-import org.springframework.stereotype.Indexed;
 
 import java.util.*;
 
+/**
+ * User Entity
+ */
 @Entity
 @Table(indexes = @Index(columnList = "email", unique = true))
 @Getter

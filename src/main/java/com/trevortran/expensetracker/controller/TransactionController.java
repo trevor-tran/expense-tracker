@@ -4,14 +4,12 @@ import com.trevortran.expensetracker.model.Transaction;
 import com.trevortran.expensetracker.security.UserPrincipal;
 import com.trevortran.expensetracker.service.CategoryService;
 import com.trevortran.expensetracker.service.TransactionService;
-import com.trevortran.expensetracker.service.UserService;
 import com.trevortran.expensetracker.util.OrderBy;
 import com.trevortran.expensetracker.util.SortBy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,6 +17,9 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.*;
 
+/**
+ * Controller handles all requests to "/transaction" path
+ */
 @Controller
 @Slf4j
 @RequestMapping("/transaction")
@@ -32,8 +33,16 @@ public class TransactionController {
         this.categoryService = categoryService;
     }
 
+    /**
+     * Retrieve all transactions/expenses which belong to the principal
+     * The transactions/expenses are sorted in a particular order
+     * @param userPrincipal authenticated user
+     * @param sortBy which field to sort by
+     * @param orderBy either 'asc' or 'desc'
+     * @return ModelAndView
+     */
     @GetMapping("")
-    public ModelAndView getAllTransactions(@AuthenticationPrincipal UserPrincipal userPrincipal,
+    public ModelAndView showAllTransactions(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                             @RequestParam(value = "sort", defaultValue = "date", required = false) String sortBy,
                                            @RequestParam(value = "order", defaultValue = "desc", required = false) String orderBy) {
 
@@ -45,7 +54,7 @@ public class TransactionController {
         SortBy sortByEnum = SortBy.stringToEnum(sortBy);
 
         // sort transactions
-        // default: sort by date and ascending
+        // default: sort by date and descending if none specified
         sortInPlace(transactions, sortByEnum, orderByEnum);
 
         ModelAndView modelAndView = new ModelAndView("expense");
@@ -59,6 +68,12 @@ public class TransactionController {
         return modelAndView;
     }
 
+    /**
+     * Handle adding/editing a transaction
+     * @param userPrincipal authenticated user
+     * @param transaction Transaction
+     * @return RedirectView
+     */
     @PostMapping("")
     public RedirectView saveTransaction(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                         @ModelAttribute Transaction transaction) {
@@ -69,8 +84,13 @@ public class TransactionController {
         return new RedirectView("/transaction");
     }
 
+    /**
+     * display Analytic page with injected transactions which belong to authenticated user
+     * @param userPrincipal authenticated user
+     * @return ModelAndView
+     */
     @GetMapping("/analytic")
-    public ModelAndView renderAnalytic(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ModelAndView showAnalytic(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         UUID userId = userPrincipal.getId();
         List<Transaction> transactions = transactionService.findAllByUserId(userId);
 
@@ -79,12 +99,22 @@ public class TransactionController {
         return modelAndView;
     }
 
+    /**
+     * Retrieve a transaction/expense
+     * @param transactionId the Id of the transaction/expense
+     * @return Transaction
+     */
     @GetMapping("/{transactionId}")
     public ResponseEntity<?> getTransaction(@PathVariable("transactionId") UUID transactionId) {
         Optional<Transaction> transaction = transactionService.findById(transactionId);
         return transaction.map(ResponseEntity::ok).orElse(ResponseEntity.badRequest().build());
     }
 
+    /**
+     * delete a transaction/expense
+     * @param transactionId the Id of the transaction/expense deleted
+     * @return OK status code if success, otherwise BadRequest status code
+     */
     @DeleteMapping("/{transactionId}")
     public ResponseEntity<?> deleteTransaction(@PathVariable("transactionId") UUID transactionId) {
         boolean exist = transactionService.existsById(transactionId);
@@ -97,6 +127,12 @@ public class TransactionController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Sort the list of transactions in place
+     * @param transactions list of transactions
+     * @param sortBy Enum, specifying which field to sort on
+     * @param orderBy Enum, either "asc" or "desc" ordering
+     */
     private void sortInPlace(List<Transaction> transactions, SortBy sortBy, OrderBy orderBy) {
         if (transactions == null || transactions.isEmpty()) {
             return;

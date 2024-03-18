@@ -2,7 +2,6 @@ package com.trevortran.expensetracker.security;
 
 import com.trevortran.expensetracker.model.Transaction;
 import com.trevortran.expensetracker.model.User;
-import com.trevortran.expensetracker.model.UserDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -10,6 +9,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * User Principal
+ */
 public class UserPrincipal implements UserDetails {
     private User user;
 

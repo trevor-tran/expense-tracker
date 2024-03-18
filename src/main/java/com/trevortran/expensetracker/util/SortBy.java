@@ -1,5 +1,8 @@
 package com.trevortran.expensetracker.util;
 
+/**
+ * A Utility class that specifies what available fields for sorting
+ */
 public enum SortBy {
     DATE("date"),
     DESCRIPTION("description"),

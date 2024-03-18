@@ -9,6 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementing Category Service Interface.
+ */
 @Service
 public class CategoryServiceImpl implements CategoryService{
     private final CategoryRepository categoryRepository;

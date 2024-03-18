@@ -13,6 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+/**
+ * Spring Security Configuration
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {

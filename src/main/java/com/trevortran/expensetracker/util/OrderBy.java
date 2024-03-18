@@ -1,5 +1,8 @@
 package com.trevortran.expensetracker.util;
 
+/**
+ * Ordering specification, either Ascending or Descending
+ */
 public enum OrderBy {
     ASC("asc"),
     DESC("desc");
