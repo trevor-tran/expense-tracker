@@ -5,9 +5,7 @@ function deleteTransactionById(transactionId, csrf) {
     const url = `${currentUrl}/${transactionId}?${parameterName}=${token}`;
     axios.delete(url)
         .then(response => {
-            if (response.status === 200) {
-                window.location.reload();
-            }
+            window.location.reload();
         }).catch(error => {
         // handle error
         console.log(error);

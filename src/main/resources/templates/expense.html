@@ -114,10 +114,10 @@
                                         th:onclick="editTransactionById([[${transaction.getId()}]], [[${_csrf}]])">
                                     <i class="bi bi-pencil-square"></i>
                                 </button>
-                                <a href="" type="button" class="btn" style="padding: 0"
+                                <button type="button" class="btn" style="padding: 0"
                                    th:onclick="deleteTransactionById([[${transaction.getId()}]], [[${_csrf}]])">
                                     <i class="bi bi-trash" style="color: red"></i>
-                                </a>
+                                </button>
                             </td>
 
                             <!-- Modal -->
