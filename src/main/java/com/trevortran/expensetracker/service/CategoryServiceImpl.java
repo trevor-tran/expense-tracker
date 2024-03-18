@@ -20,7 +20,7 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     @Transactional
-    public void saveC(Category category) {
+    public void save(Category category) {
         categoryRepository.save(category);
     }
 
@@ -33,6 +33,11 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public Optional<Category> findById(long id) {
        return categoryRepository.findById(id);
+    }
+
+    @Override
+    public Optional<Category> findByName(String name) {
+        return categoryRepository.findByName(name);
     }
 
     @Override
