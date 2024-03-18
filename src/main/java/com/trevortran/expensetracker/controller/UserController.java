@@ -43,7 +43,8 @@ public class UserController {
     @GetMapping("/profile")
     public ModelAndView showUserProfile(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         ModelAndView modelAndView = new ModelAndView("profile");
-        modelAndView.addObject("userDTO", new UserProfileDTO(userPrincipal.getFirstName(), userPrincipal.getLastName()));
+        modelAndView.addObject("userProfileDTO",
+                new UserProfileDTO(userPrincipal.getFirstName(), userPrincipal.getLastName(), userPrincipal.getUsername()));
         return modelAndView;
     }
 
