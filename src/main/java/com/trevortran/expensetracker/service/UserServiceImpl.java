@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+/**
+ * Implementing User Service Interface.
+ */
 @Service
 public class UserServiceImpl implements UserService {
 

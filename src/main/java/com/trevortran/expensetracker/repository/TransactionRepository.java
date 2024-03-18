@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Transaction Repository responsible for Transaction Entity related operations
+ */
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
     @Query("SELECT t FROM Transaction t WHERE t.userId = :userId")

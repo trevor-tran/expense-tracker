@@ -7,6 +7,9 @@ import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+/**
+ * Role Entity
+ */
 @Entity
 @Setter
 @Getter

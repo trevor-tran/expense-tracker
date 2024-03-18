@@ -1,12 +1,17 @@
 package com.trevortran.expensetracker.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Objects;
-import java.util.Set;
 
+/**
+ * Category Entity
+ */
 @Entity
 @Table(indexes = @Index(columnList = "name", unique = true))
 @Getter

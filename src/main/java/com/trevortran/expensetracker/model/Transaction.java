@@ -8,6 +8,9 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Transaction Entity
+ */
 @Entity
 @Getter
 @Setter
