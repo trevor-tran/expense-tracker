@@ -97,7 +97,10 @@ function transformToBarChartData(transactions) {
 }
 
 function loadChart(transactions) {
-    const barChartData = transformToBarChartData(transactions);
+    const currentMonthTransactions = getCurrentMonthTransactions(transactions);
+    const lineChartData = transformToBarChartData(transactions);
+
+    const barChartData = transformToBarChartData(currentMonthTransactions);
     const doughnutChartData = {
         labels: [],
         datasets: [{
@@ -116,6 +119,7 @@ function loadChart(transactions) {
 
     const barChartCtx = $("#barChart");
     const doughnutChartCtx = $("#doughnutChart");
+    const linneChartCtx = $("#lineChart");
 
     new Chart(barChartCtx, {
         type: 'bar',
@@ -149,6 +153,46 @@ function loadChart(transactions) {
                 },
                 y: {
                     stacked: true,
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    new Chart(linneChartCtx, {
+        type: 'line',
+        data: lineChartData,
+        options: {
+            responsive: true,
+            interaction: {
+                intersect: false,
+                mode: 'index',
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Expenses By Month'
+                },
+                legend: {
+                    position: 'top',
+                    labels: {
+                        font: {
+                            family: "sans-serif",
+                            size: 14,
+                            weight: "bolder",
+                        },
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        callback: function (value, index, ticks) {
+                            return dayjs(this.getLabelForValue(value)).format('MMM. DD YYYY')
+                        }
+                    }
+                },
+                y: {
                     beginAtZero: true
                 }
             }
@@ -211,4 +255,13 @@ function loadChart(transactions) {
             }
         }]
     });
+}
+
+function getCurrentMonthTransactions(transactions) {
+    const startOfCurrentMonth = dayjs().startOf('M');
+    const endOfCurrentMonth = dayjs().endOf('M');
+    return transactions.filter(t =>
+        dayjs(t.date).isSameOrAfter(startOfCurrentMonth) &&
+        dayjs(t.date).isSameOrBefore(endOfCurrentMonth)
+    );
 }

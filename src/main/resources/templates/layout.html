@@ -27,6 +27,8 @@
 
     <!-- dayjs -->
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/isSameOrBefore.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/isSameOrAfter.js"></script>
 
     <!-- voca for string manipulation-->
     <script src="https://cdn.jsdelivr.net/npm/voca@1.4.1/index.min.js"></script>
@@ -38,6 +40,10 @@
         $(window).on("load", function () {
             setActiveLink();
         });
+
+        // load dayjs plugins
+        dayjs.extend(window.dayjs_plugin_isSameOrBefore);
+        dayjs.extend(window.dayjs_plugin_isSameOrAfter);
     </script>
     <!-- style-->
     <style>
@@ -58,7 +64,7 @@
 <main th:fragment="container(content)" class="container-fluid d-flex justify-content-between"
       style="width: 100vw; height: 100vh; padding: 0 10%">
     <div class="row p-2" style="width: 100%; height: 100%">
-        <div id="sidebar" class="shadow d-flex flex-column flex-shrink-0" style="height: 100vh; width: 300px; margin-right: 30px">
+        <div id="sidebar" class="shadow rounded d-flex flex-column flex-shrink-0 sticky-top" style="height: 100vh; width: 300px; margin-right: 30px">
             <div class="d-flex flex-column justify-content-center align-items-center">
                 <img class="rounded-circle" src="/images/user-default.png" alt="user default avatar" width="100"
                      height="100">
@@ -88,7 +94,7 @@
         </div>
         <!-- reference: https://github.com/thymeleaf/thymeleafexamples-layouts/blob/master/src/main/webapp/WEB-INF/views/task/layout.html-->
         <!-- The value passed from calling template will be inserted in this element-->
-        <div class="col" th:insert="${content}" style="padding-top: 7vh">
+        <div class="col" style="height: 100vh" th:insert="${content}">
             <!-- this content will be replaced by calling template-->
         </div>
     </div>
