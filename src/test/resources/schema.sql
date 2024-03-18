@@ -1,0 +1,1 @@
+create schema if not exists expense_tracker_test
