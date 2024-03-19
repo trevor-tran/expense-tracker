@@ -1,4 +1,4 @@
-package com.trevortran.expensetracker.controller;
+package com.trevortran.expensetracker.exceptionhandler;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
