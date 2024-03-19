@@ -42,6 +42,7 @@ public class UserController {
      */
     @GetMapping("/profile")
     public ModelAndView showUserProfile(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        log.info("Showing user profile, userId: " + userPrincipal.getId());
         ModelAndView modelAndView = new ModelAndView("profile");
         modelAndView.addObject("userProfileDTO",
                 new UserProfileDTO(userPrincipal.getFirstName(), userPrincipal.getLastName(), userPrincipal.getUsername()));
@@ -54,6 +55,7 @@ public class UserController {
      */
     @GetMapping("/signup")
     public ModelAndView signUp() {
+        log.info("Showing user signup form");
         ModelAndView modelAndView = new ModelAndView("signup");
         modelAndView.addObject("userCreationDTO", new UserCreationDTO());
         return modelAndView;
@@ -67,6 +69,7 @@ public class UserController {
      */
     @PostMapping("/signup")
     public ModelAndView signUp(@ModelAttribute("userCreationDTO") @Valid UserCreationDTO userCreationDTO, BindingResult bindingResult) {
+        log.info("Validating user signup info");
         if (bindingResult.hasErrors()) {
             return new ModelAndView("signup");
         }
@@ -80,6 +83,7 @@ public class UserController {
      */
     @GetMapping("/signin")
     public ModelAndView signIn() {
+        log.info("Showing user sign form");
         return showSignInPage(false);
     }
 
@@ -89,6 +93,7 @@ public class UserController {
      */
     @GetMapping(value = "/signin", params = {"error"})
     public ModelAndView signInError() {
+        log.info("Showing user signin form with error message");
         return showSignInPage(true);
     }
 

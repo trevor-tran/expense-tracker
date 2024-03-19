@@ -2,6 +2,8 @@ package com.trevortran.expensetracker.service;
 
 import com.trevortran.expensetracker.model.Category;
 import com.trevortran.expensetracker.model.Transaction;
+import com.trevortran.expensetracker.model.UserCreationDTO;
+import com.trevortran.expensetracker.security.UserPrincipal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +26,14 @@ public class TransactionServiceTests {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private UserService userService;
+
     @BeforeEach
     void setup() {
         categoryService.save(new Category("gas"));
+        UserCreationDTO user = new UserCreationDTO("foo", "foo", "bar@bar.com", "123", "123");
+        userService.create(user);
     }
 
     @Test
@@ -34,9 +41,9 @@ public class TransactionServiceTests {
         Optional<Category> gasCategory = categoryService.findByName("gas");
         assertTrue(gasCategory.isPresent());
 
-        UUID userId = UUID.randomUUID();
+        UserPrincipal userPrincipal = (UserPrincipal)userService.loadUserByUsername("bar@bar.com");
 
-        Transaction t = new Transaction(userId,
+        Transaction t = new Transaction(userPrincipal.getId(),
                 LocalDate.now(),
                 "foo1",
                 1.0,

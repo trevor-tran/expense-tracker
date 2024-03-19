@@ -2,6 +2,7 @@ package com.trevortran.expensetracker.repository;
 
 import com.trevortran.expensetracker.model.Category;
 import com.trevortran.expensetracker.model.Transaction;
+import com.trevortran.expensetracker.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,22 +28,32 @@ public class TransactionRepositoryTests {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @BeforeEach
     void setupEach() {
         categoryRepository.save(new Category("gas"));
         categoryRepository.save(new Category("shopping"));
+        User user = new User("test@gmail.com", "foo", "foo", "123", null);;
+        userRepository.save(user);
     }
 
     @Test
     void testFindNonExistingTransactionsByUserId() {
-        UUID userId = UUID.randomUUID();
+        Optional<User> userOptional = userRepository.findByEmail("test@gmail.com");
+        assertTrue(userOptional.isPresent());
+        UUID userId = userOptional.get().getId();
+
         List<Transaction> transactions = transactionRepository.findAllByUserId(userId);
         assertTrue(transactions.isEmpty());
     }
 
     @Test
     void testFindExistingTransactionsByUserId() {
-        UUID userId = UUID.randomUUID();
+        Optional<User> userOptional = userRepository.findByEmail("test@gmail.com");
+        assertTrue(userOptional.isPresent());
+        UUID userId = userOptional.get().getId();
 
         Optional<Category> gasCategory = categoryRepository.findByName("gas");
         Optional<Category> shoppingCategory = categoryRepository.findByName("shopping");
