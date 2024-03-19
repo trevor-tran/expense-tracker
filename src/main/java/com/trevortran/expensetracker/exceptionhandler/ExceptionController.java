@@ -1,5 +1,6 @@
 package com.trevortran.expensetracker.exceptionhandler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -8,6 +9,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
  * A global exception handler controller
  */
 @ControllerAdvice
+@Slf4j
 public class ExceptionController {
 
     /**
@@ -16,7 +18,7 @@ public class ExceptionController {
      */
     @ExceptionHandler({NoHandlerFoundException.class})
     public String handlePageNotFoundException() {
-        System.out.println("page not found");
+        log.warn("User's trying to access non-existing page");
         return "error";
     }
 }

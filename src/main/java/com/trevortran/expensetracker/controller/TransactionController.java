@@ -47,6 +47,9 @@ public class TransactionController {
                                            @RequestParam(value = "order", defaultValue = "desc", required = false) String orderBy) {
 
         UUID userId = userPrincipal.getId();
+
+        log.info("Getting user's transaction, performed by authenticated userId: " + userId);
+
         // todo: ideally should call getTransactions() but currently it throws lazy loading error
         List<Transaction> transactions = transactionService.findAllByUserId(userId);
         transactions = transactions != null ? transactions : new ArrayList<>();
@@ -56,6 +59,8 @@ public class TransactionController {
         // sort transactions
         // default: sort by date and descending if none specified
         sortInPlace(transactions, sortByEnum, orderByEnum);
+
+        log.info("Populating user's transaction to template");
 
         ModelAndView modelAndView = new ModelAndView("expense");
         modelAndView.addObject("transactions", transactions);
@@ -78,8 +83,12 @@ public class TransactionController {
     public RedirectView saveTransaction(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                         @ModelAttribute Transaction transaction) {
 
-        transaction.setUserId(userPrincipal.getId());
+        UUID userId = userPrincipal.getId();
+
+        transaction.setUserId(userId);
+        log.info("Saving user's transaction, performed by userId: " + userId);
         transactionService.save(transaction);
+        log.info("A transaction saved, performed by userId: " + userId);
 
         return new RedirectView("/transaction");
     }
@@ -92,6 +101,9 @@ public class TransactionController {
     @GetMapping("/analytic")
     public ModelAndView showAnalytic(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         UUID userId = userPrincipal.getId();
+
+        log.info("showing user's analytic, performed by userId: " + userId);
+
         List<Transaction> transactions = transactionService.findAllByUserId(userId);
 
         ModelAndView modelAndView = new ModelAndView("analytic");
@@ -105,9 +117,23 @@ public class TransactionController {
      * @return Transaction
      */
     @GetMapping("/{transactionId}")
-    public ResponseEntity<?> getTransaction(@PathVariable("transactionId") UUID transactionId) {
+    public ResponseEntity<?> getTransaction(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                            @PathVariable("transactionId") UUID transactionId) {
+        UUID userId = userPrincipal.getId();
+
+        log.info("Getting transaction, performed by userId: " + userId);
+
         Optional<Transaction> transaction = transactionService.findById(transactionId);
-        return transaction.map(ResponseEntity::ok).orElse(ResponseEntity.badRequest().build());
+
+        return transaction.map(response -> {
+            //verify this is his or her transaction
+            if (response.getUserId().equals(userId)) {
+                return ResponseEntity.ok(response);
+            } else {
+                log.warn("User is trying to retrieve a transaction that does not belong to them");
+                return ResponseEntity.badRequest().build();
+            }
+        }).orElse(ResponseEntity.badRequest().build());
     }
 
     /**
@@ -116,15 +142,24 @@ public class TransactionController {
      * @return OK status code if success, otherwise BadRequest status code
      */
     @DeleteMapping("/{transactionId}")
-    public ResponseEntity<?> deleteTransaction(@PathVariable("transactionId") UUID transactionId) {
-        boolean exist = transactionService.existsById(transactionId);
-        if (!exist) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<?> deleteTransaction (@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                @PathVariable("transactionId") UUID transactionId) {
+        UUID userId = userPrincipal.getId();
 
-        transactionService.delete(transactionId);
+        log.info("Deleting transaction, performed by userId: " + userId);
 
-        return ResponseEntity.ok().build();
+        Optional<Transaction> transaction = transactionService.findById(transactionId);
+
+        return transaction.map(response -> {
+            //verify this is his or her transaction
+            if (response.getUserId().equals(userId)) {
+                transactionService.delete(transactionId);
+                return ResponseEntity.ok(response);
+            } else {
+                log.warn("User is trying to delete a transaction that does not belong to them");
+                return ResponseEntity.badRequest().build();
+            }
+        }).orElse(ResponseEntity.badRequest().build());
     }
 
     /**
