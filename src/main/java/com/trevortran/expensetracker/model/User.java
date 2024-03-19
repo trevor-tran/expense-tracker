@@ -28,7 +28,7 @@ public class User {
     String password;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "transaction_id")
+    @JoinColumn(name = "userId")
     List<Transaction> transactions = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
