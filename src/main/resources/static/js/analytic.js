@@ -121,8 +121,9 @@ function loadChart(transactions) {
 
     const barChartCtx = $("#barChart");
     const doughnutChartCtx = $("#doughnutChart");
-    const linneChartCtx = $("#lineChart");
+    const lineChartCtx = $("#lineChart");
 
+    // bar chart
     new Chart(barChartCtx, {
         type: 'bar',
         data: barChartData,
@@ -131,7 +132,7 @@ function loadChart(transactions) {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Current Month Expenses By Day'
+                    text: 'Expenses By Day'
                 },
                 tooltip: {
                     callbacks: {
@@ -166,7 +167,66 @@ function loadChart(transactions) {
         }
     });
 
-    new Chart(linneChartCtx, {
+    // doughnut chart
+    new Chart(doughnutChartCtx, {
+        type: 'doughnut',
+        data: doughnutChartData,
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Expenses By Category'
+                },
+                legend: {
+                    position: 'top',
+                    labels: {
+                        // This more specific font property overrides the global property
+                        font: {
+                            family: "sans-serif",
+                            size: 14,
+                            weight: "bolder"
+                        }
+                    }
+                }
+            }
+        },
+        plugins: [{
+            beforeDraw: function (chart) {
+                // resource: https://github.com/chartjs/Chart.js/discussions/10077
+                const ctx = chart.ctx;
+                const {width, height, top} = chart.chartArea;
+                const centerX = width / 2;
+                const centerY = height / 2 + top;
+
+                ctx.restore();
+
+                const metrics = ctx.measureText('100.0%');
+                ctx.clearRect(centerX - metrics.width / 2, centerY - 30, metrics.width, 60);
+                ctx.textAlign = "center";
+
+                ctx.textBaseline = "bottom";
+                ctx.font = "0.7em sans-serif";
+                ctx.fillText("Total Expenses", centerX, centerY);
+
+                // Format to USD using the locale, style, and currency.
+                let USDollar = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                });
+
+                const totalSpending = chart.config.data.datasets[0].data.reduce((acc, curr) => acc + curr, 0);
+                ctx.textBaseline = "top";
+                ctx.font = "bolder 1.3em sans-serif";
+                ctx.fillText(USDollar.format(totalSpending), centerX, centerY);
+
+                ctx.save();
+            }
+        }]
+    });
+
+    // line chart
+    new Chart(lineChartCtx, {
         type: 'line',
         data: lineChartData,
         options: {
@@ -217,63 +277,6 @@ function loadChart(transactions) {
                 }
             }
         }
-    });
-
-    new Chart(doughnutChartCtx, {
-        type: 'doughnut',
-        data: doughnutChartData,
-        options: {
-            responsive: true,
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Current Month Expenses By Category'
-                },
-                legend: {
-                    position: 'top',
-                    labels: {
-                        // This more specific font property overrides the global property
-                        font: {
-                            family: "sans-serif",
-                            size: 14,
-                            weight: "bolder"
-                        }
-                    }
-                }
-            }
-        },
-        plugins: [{
-            beforeDraw: function (chart) {
-                // resource: https://github.com/chartjs/Chart.js/discussions/10077
-                const ctx = chart.ctx;
-                const {width, height, top} = chart.chartArea;
-                const centerX = width / 2;
-                const centerY = height / 2 + top;
-
-                ctx.restore();
-
-                const metrics = ctx.measureText('100.0%');
-                ctx.clearRect(centerX - metrics.width / 2, centerY - 30, metrics.width, 60);
-                ctx.textAlign = "center";
-
-                ctx.textBaseline = "bottom";
-                ctx.font = "0.7em sans-serif";
-                ctx.fillText("Total Expenses", centerX, centerY);
-
-                // Format to USD using the locale, style, and currency.
-                let USDollar = new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD',
-                });
-
-                const totalSpending = chart.config.data.datasets[0].data.reduce((acc, curr) => acc + curr, 0);
-                ctx.textBaseline = "top";
-                ctx.font = "bolder 1.3em sans-serif";
-                ctx.fillText(USDollar.format(totalSpending), centerX, centerY);
-
-                ctx.save();
-            }
-        }]
     });
 }
 

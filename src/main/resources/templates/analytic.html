@@ -14,17 +14,19 @@
 </head>
 <body>
 <div th:insert="~{layout :: container(~{ :: content})}">
-    <div th:fragment="content" class="container h-100">
-        <div class="row">
-            <div class="col shadow p-2 rounded" style="margin-right: 20px">
+    <div th:fragment="content" class="container">
+        <div class="row shadow p-2 rounded">
+            <p class="h6">Current Month Expenses</p>
+            <div class="col border" style="margin-right: 20px">
                 <canvas id="barChart"></canvas>
             </div>
-            <div class="col-4 shadow p-2 rounded">
+            <div class="col-4 border">
                 <canvas id="doughnutChart"></canvas>
             </div>
         </div>
-        <div class="row mt-5">
-            <div class="col shadow p-2 rounded">
+        <div class="row mt-5 shadow p-2 rounded">
+            <p class="h6">Overall Expenses</p>
+            <div class="col border">
                 <canvas id="lineChart"></canvas>
             </div>
         </div>
