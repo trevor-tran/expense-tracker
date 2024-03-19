@@ -89,7 +89,9 @@ function transformToBarChartData(transactions) {
 
             dataPoint.data.push(amountPerDate);
         }
-        dataPoint.backgroundColor = COLORS[colorIndex++];
+        dataPoint.backgroundColor = COLORS[colorIndex];
+        dataPoint.borderColor = COLORS[colorIndex];
+        colorIndex++;
 
         chartData.datasets.push(dataPoint);
     });
@@ -97,7 +99,10 @@ function transformToBarChartData(transactions) {
 }
 
 function loadChart(transactions) {
-    const barChartData = transformToBarChartData(transactions);
+    const currentMonthTransactions = getCurrentMonthTransactions(transactions);
+    const lineChartData = transformToBarChartData(transactions);
+
+    const barChartData = transformToBarChartData(currentMonthTransactions);
     const doughnutChartData = {
         labels: [],
         datasets: [{
@@ -116,7 +121,9 @@ function loadChart(transactions) {
 
     const barChartCtx = $("#barChart");
     const doughnutChartCtx = $("#doughnutChart");
+    const lineChartCtx = $("#lineChart");
 
+    // bar chart
     new Chart(barChartCtx, {
         type: 'bar',
         data: barChartData,
@@ -125,7 +132,12 @@ function loadChart(transactions) {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Current Month Expenses By Day'
+                    text: 'Expenses By Day'
+                },
+                tooltip: {
+                    callbacks: {
+                        title: tooltipItems => dayjs(tooltipItems[0].label).format('MMM. DD YYYY')
+                    }
                 },
                 legend: {
                     position: 'top',
@@ -155,6 +167,7 @@ function loadChart(transactions) {
         }
     });
 
+    // doughnut chart
     new Chart(doughnutChartCtx, {
         type: 'doughnut',
         data: doughnutChartData,
@@ -163,7 +176,7 @@ function loadChart(transactions) {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Current Month Expenses'
+                    text: 'Expenses By Category'
                 },
                 legend: {
                     position: 'top',
@@ -211,4 +224,67 @@ function loadChart(transactions) {
             }
         }]
     });
+
+    // line chart
+    new Chart(lineChartCtx, {
+        type: 'line',
+        data: lineChartData,
+        options: {
+            responsive: true,
+            interaction: {
+                intersect: false,
+                mode: 'index',
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Expense Trends'
+                },
+                tooltip: {
+                    callbacks: {
+                        title: tooltipItems => dayjs(tooltipItems[0].label).format('MMM. DD YYYY'),
+                        footer: tooltipItems => {
+                            let total = 0;
+
+                            tooltipItems.forEach(function(tooltipItem) {
+                                total += tooltipItem.parsed.y;
+                            });
+                            return 'Total: ' + total;
+                        }
+                    }
+                },
+                legend: {
+                    position: 'top',
+                    labels: {
+                        font: {
+                            family: "sans-serif",
+                            size: 14,
+                            weight: "bolder",
+                        },
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        callback: function (value, index, ticks) {
+                            return dayjs(this.getLabelForValue(value)).format('MMM. DD YYYY')
+                        }
+                    }
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function getCurrentMonthTransactions(transactions) {
+    const startOfCurrentMonth = dayjs().startOf('M');
+    const endOfCurrentMonth = dayjs().endOf('M');
+    return transactions.filter(t =>
+        dayjs(t.date).isSameOrAfter(startOfCurrentMonth) &&
+        dayjs(t.date).isSameOrBefore(endOfCurrentMonth)
+    );
 }
