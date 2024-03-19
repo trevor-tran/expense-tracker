@@ -89,7 +89,9 @@ function transformToBarChartData(transactions) {
 
             dataPoint.data.push(amountPerDate);
         }
-        dataPoint.backgroundColor = COLORS[colorIndex++];
+        dataPoint.backgroundColor = COLORS[colorIndex];
+        dataPoint.borderColor = COLORS[colorIndex];
+        colorIndex++;
 
         chartData.datasets.push(dataPoint);
     });
@@ -131,6 +133,11 @@ function loadChart(transactions) {
                     display: true,
                     text: 'Current Month Expenses By Day'
                 },
+                tooltip: {
+                    callbacks: {
+                        title: tooltipItems => dayjs(tooltipItems[0].label).format('MMM. DD YYYY')
+                    }
+                },
                 legend: {
                     position: 'top',
                     labels: {
@@ -171,7 +178,20 @@ function loadChart(transactions) {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Expenses By Month'
+                    text: 'Expense Trends'
+                },
+                tooltip: {
+                    callbacks: {
+                        title: tooltipItems => dayjs(tooltipItems[0].label).format('MMM. DD YYYY'),
+                        footer: tooltipItems => {
+                            let total = 0;
+
+                            tooltipItems.forEach(function(tooltipItem) {
+                                total += tooltipItem.parsed.y;
+                            });
+                            return 'Total: ' + total;
+                        }
+                    }
                 },
                 legend: {
                     position: 'top',
@@ -207,7 +227,7 @@ function loadChart(transactions) {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Current Month Expenses'
+                    text: 'Current Month Expenses By Category'
                 },
                 legend: {
                     position: 'top',
