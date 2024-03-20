@@ -3,7 +3,7 @@
 A comprehensive tool for managing your personal finances. This project allows users to track their expenses, providing a clear overview of their financial health.
 
 ## Features
-- **Create Account:** Store each user's expeneses
+- **Create Account:** Store each user's expenses
 - **Add Expenses:** Quickly log expenses across various categories.
 - **Analytics:** Visualize your financial activities with easy-to-understand graphs and charts.
 - **Category Management:** Customize categories to fit your financial planning needs.
