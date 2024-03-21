@@ -1,8 +1,9 @@
+const HOST = `${location.protocol}//${location.host}`;
+
 // hook up with add new transaction button
 function deleteTransactionById(transactionId, csrf) {
     const {token, parameterName} = csrf;
-    const currentUrl = window.location.href;
-    const url = `${currentUrl}/${transactionId}?${parameterName}=${token}`;
+    const url = `${HOST}/transaction/${transactionId}?${parameterName}=${token}`;
     axios.delete(url)
         .then(response => {
             window.location.reload();
@@ -15,8 +16,7 @@ function deleteTransactionById(transactionId, csrf) {
 // hook up with edit transaction button
 function editTransactionById(transactionId, csrf) {
     const {token, parameterName} = csrf;
-    const currentUrl = window.location.href;
-    const url = `${currentUrl}/${transactionId}?${parameterName}=${token}`;
+    const url = `${HOST}/transaction/${transactionId}?${parameterName}=${token}`;
     axios.get(url)
         .then(response => {
             // handle success
