@@ -90,7 +90,7 @@ function transformToBarChartData(transactions) {
             dataPoint.data.push(amountPerDate);
         }
         dataPoint.backgroundColor = COLORS[colorIndex];
-        dataPoint.borderColor = COLORS[colorIndex];
+        dataPoint.fill = true;
         colorIndex++;
 
         chartData.datasets.push(dataPoint);
@@ -161,7 +161,11 @@ function loadChart(transactions) {
                 },
                 y: {
                     stacked: true,
-                    beginAtZero: true
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'USD ($)'
+                    }
                 }
             }
         }
@@ -273,7 +277,17 @@ function loadChart(transactions) {
                     }
                 },
                 y: {
-                    beginAtZero: true
+                    stacked: true,
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'USD ($)'
+                    }
+                }
+            },
+            elements: {
+                point:{
+                    radius: 0
                 }
             }
         }
