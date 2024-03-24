@@ -4,11 +4,23 @@ import com.trevortran.expensetracker.model.UserCreationDTO;
 import com.trevortran.expensetracker.model.UserProfileDTO;
 import com.trevortran.expensetracker.security.UserPrincipal;
 import com.trevortran.expensetracker.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextHolderStrategy;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -29,6 +41,13 @@ public class UserController {
     }
 
     private final UserService userService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
+
+    private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy();
 
     @Autowired
     public UserController(UserService userService) {
@@ -68,12 +87,31 @@ public class UserController {
      * @return redirect to signin page after an account created
      */
     @PostMapping("/signup")
-    public ModelAndView signUp(@ModelAttribute("userCreationDTO") @Valid UserCreationDTO userCreationDTO, BindingResult bindingResult) {
+    public ModelAndView signUp(@ModelAttribute("userCreationDTO") @Valid UserCreationDTO userCreationDTO, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) {
         log.info("Validating user signup info");
         if (bindingResult.hasErrors()) {
             return new ModelAndView("signup");
         }
-        userService.create(userCreationDTO);
+        try {
+            userService.create(userCreationDTO);
+
+        } catch (DataIntegrityViolationException exception) {
+            System.out.println(exception.getMessage());
+            bindingResult.rejectValue("email", "duplicate_email", "Email belongs to an existing user");
+            return new ModelAndView("signup");
+        }
+
+        // manually authenticate and persist user session if authenticated
+        Authentication authenticationRequest = UsernamePasswordAuthenticationToken.unauthenticated(userCreationDTO.getEmail(), userCreationDTO.getPassword());
+        Authentication authenticationResponse = authenticationManager.authenticate(authenticationRequest);
+        if (authenticationResponse.isAuthenticated()) {
+            SecurityContext context = securityContextHolderStrategy.createEmptyContext();
+            context.setAuthentication(authenticationResponse);
+            securityContextHolderStrategy.setContext(context);
+            securityContextRepository.saveContext(context, request, response);
+            return new ModelAndView("redirect:/transaction");
+        }
+
         return new ModelAndView("redirect:/signin");
     }
 
@@ -83,7 +121,7 @@ public class UserController {
      */
     @GetMapping("/signin")
     public ModelAndView signIn() {
-        log.info("Showing user sign form");
+        log.info("Showing user signin form");
         return showSignInPage(false);
     }
 
